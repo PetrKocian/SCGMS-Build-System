@@ -10,7 +10,7 @@
 int main(int argc, char** argv) {
 
 	// check if input directory exists
-	if (!fs::exists(src))
+	if (!fs::exists(src) || fs::is_empty(src))
 	{
 		fs::create_directory(src);
 		abort("Provide filter and configuration files in input folder");

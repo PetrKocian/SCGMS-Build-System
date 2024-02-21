@@ -5,7 +5,7 @@
 // define source and target paths
 const fs::path cwd = fs::current_path();
 const fs::path src = cwd / "input";
-const fs::path target = cwd / "output";
+const fs::path target = cwd / "temp";
 
 void removeEmptyDirectories(const fs::path& dir) {
 	if (!fs::exists(dir) || !fs::is_directory(dir)) {
