@@ -1,4 +1,5 @@
 linux/Preprocessor/build/
 linux/build_script/myenv/
 linux/build_script/temp
+linux/build_script/build_dir
 
