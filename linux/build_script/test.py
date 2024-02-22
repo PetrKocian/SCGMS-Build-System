@@ -6,7 +6,7 @@ import subprocess
 from distutils.dir_util import copy_tree
 
 build_dir = "build_dir"
-supported_archs = ["esp32", "rpizerow", "wasm_emcc", "wasm_wamr"]
+supported_archs = ["esp32", "rpizerow", "wasm_emcc", "wasm_wamr", "all"]
 preprocessor = "./preprocessor"
 
 git_ssh_identity_file = os.path.expanduser("~/.ssh/id_ed25519")
@@ -21,7 +21,7 @@ def print_help():
 def architecture_supported(input):
     for arch in supported_archs:
         if input == arch:
-            return
+            return True
     return False
 
 def clone_scgms():
@@ -41,16 +41,16 @@ def copy_scgms_esp32():
     copy_tree("temp/scgms/sources", "build_dir/ESP32/components/scgms_embedded/sources")
 
 def copy_scgms_rpizerow():
-    copy_tree("temp/filters", "build_dir/RpiZeroW/sources/filters")
-    copy_tree("temp/scgms/sources", "build_dir/RpiZeroW/sources/SmartCGMS")
+    shutil.copytree("temp/filters", "build_dir/RpiZeroW/sources/filters")
+    shutil.copytree("temp/scgms/sources", "build_dir/RpiZeroW/sources/SmartCGMS")
 
 def copy_scgms_wasm_emcc():
-    copy_tree("temp/scgms/sources", "build_dir/Wasm_emcc/sources")
-    copy_tree("temp/filters", "build_dir/Wasm_emcc/sources/filters")
+    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_emcc/sources")
+    shutil.copytree("temp/filters", "build_dir/Wasm_emcc/sources/filters")
 
 def copy_scgms_wasm_wamr():
-    copy_tree("temp/scgms/sources", "build_dir/Wasm_wamr/sources")
-    copy_tree("temp/filters", "build_dir/Wasm_wamr/sources/filters")
+    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_wamr/sources")
+    shutil.copytree("temp/filters", "build_dir/Wasm_wamr/sources/filters")
 
 
 
@@ -78,10 +78,10 @@ def get_architecture_folder(repo_url, branch, folder_path):
     source_folder_path = os.path.join(repo_dir, folder_path)
     destination_path = os.path.join(build_dir, folder_path)
     if os.path.exists(destination_path):
-        print("Selected architecture build dir already exists (delete it and then run the script again if needed)")
+        print("Selected architecture build dir already exists (delete it and then run the script again if needed)\n")
         return
     shutil.copytree(source_folder_path, destination_path)
-    print("Successfully copied selected architecture to '" + build_dir + "'")
+    print("Successfully copied selected architecture to '" + build_dir + "'\n")
 
 def main():
     # Check if the script is called with the correct number of arguments
@@ -95,6 +95,10 @@ def main():
     if not architecture_supported(arch):
         print_help()
         return
+
+    shutil.rmtree("temp")
+    shutil.rmtree("build_dir")
+
 
     output = subprocess.check_output(preprocessor, shell=True, stderr=subprocess.STDOUT)
     print("\nPreprocessor:")
@@ -119,6 +123,19 @@ def main():
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_emcc()
     elif arch == "wasm_wamr":
+        folder_to_pull = "Wasm_wamr"  
+        get_architecture_folder(repo_url, branch_name, folder_to_pull)
+        copy_scgms_wasm_wamr()
+    elif arch == "all":
+        folder_to_pull = "ESP32"  
+        get_architecture_folder(repo_url, branch_name, folder_to_pull)
+        copy_scgms_esp32()
+        folder_to_pull = "RpiZeroW"  
+        get_architecture_folder(repo_url, branch_name, folder_to_pull)
+        copy_scgms_rpizerow()
+        folder_to_pull = "Wasm_emcc"  
+        get_architecture_folder(repo_url, branch_name, folder_to_pull)
+        copy_scgms_wasm_emcc()
         folder_to_pull = "Wasm_wamr"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_wamr()
