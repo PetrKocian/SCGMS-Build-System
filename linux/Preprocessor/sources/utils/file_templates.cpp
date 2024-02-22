@@ -22,7 +22,7 @@ void describe_loaded_filters(refcnt::Swstr_list error_description);
 void* resolve_generated_symbol(const char *symbol_name) noexcept;)STRING_END";
 
 const std::string comb_desc_c_top =
-R"STRING_END(#include "combined_descriptors.h"
+R"STRING_END(#include "filters.h"
 #include <scgms/utils/descriptor_utils.h>
 
 using FilterDescriptorFunction = HRESULT(*)(scgms::TFilter_Descriptor**, scgms::TFilter_Descriptor**);

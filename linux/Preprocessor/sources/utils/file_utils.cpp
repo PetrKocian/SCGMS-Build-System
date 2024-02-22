@@ -151,7 +151,7 @@ std::string modifyDescriptor(fs::directory_entry& file, std::string searchString
 	fs::path parentPath = file.path().parent_path();
 	fs::path currentDirPath = file.path();
 	// find root filter folder, it is then appended to the function names
-	while (parentPath.filename().string() != "filters")
+	while (parentPath.filename().string() != "filter_chain")
 	{
 		currentDirPath = parentPath;
 		parentPath = parentPath.parent_path();

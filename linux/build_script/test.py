@@ -96,9 +96,10 @@ def main():
         print_help()
         return
 
-    shutil.rmtree("temp")
-    shutil.rmtree("build_dir")
-
+    if os.path.exists("temp"):
+        shutil.rmtree("temp")
+    if os.path.exists("build_dir"):
+        shutil.rmtree("build_dir")
 
     output = subprocess.check_output(preprocessor, shell=True, stderr=subprocess.STDOUT)
     print("\nPreprocessor:")

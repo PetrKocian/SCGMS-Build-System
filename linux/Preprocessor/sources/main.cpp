@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
 
 	// copy all filter files to filters directory
 	try {
-		fs::create_directories(target / "filters");
-		fs::copy(src, target / "filters", fs::copy_options::recursive);
+		fs::create_directories(target / "filters/filter_chain");
+		fs::copy(src, target / "filters/filter_chain", fs::copy_options::recursive);
 	}
 	catch (const std::exception & exc) {
 		abort("Failed to copy filter files:");
@@ -107,10 +107,10 @@ int main(int argc, char** argv) {
 
 	// generate combined descriptors header file
 	fs::create_directories(target / "filters/generated");
-	std::ofstream comb_desc_h(target / "filters/generated/combined_descriptors.h");
+	std::ofstream comb_desc_h(target / "filters/generated/filters.h");
 	if (!comb_desc_h.is_open())
 	{
-		abort("Could not open " + target.string() + "/filters/generated/combined_descriptors.h for writing");
+		abort("Could not open " + target.string() + "/filters/generated/filters.h for writing");
 	}
 	comb_desc_h << "#pragma once" << std::endl;
 
@@ -130,10 +130,10 @@ int main(int argc, char** argv) {
 
 
 	// generate combined descriptors source file
-	std::ofstream comb_desc_c(target / "filters/generated/combined_descriptors.cpp");
+	std::ofstream comb_desc_c(target / "filters/generated/filters.cpp");
 	if (!comb_desc_c.is_open())
 	{
-		abort("Could not open " + target.string() + "/filters/generated/combined_descriptors.c for writing");
+		abort("Could not open " + target.string() + "/filters/generated/filters.c for writing");
 	}
 
 	// top of source file
