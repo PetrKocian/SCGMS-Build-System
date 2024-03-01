@@ -5,7 +5,6 @@ import shutil
 import subprocess
 from distutils.dir_util import copy_tree
 
-
 # PATHS TO TOOLCHAINS
 esp_idf_path = "~/esp/esp-idf"
 wasi_path = "/opt/wasi-sdk"
