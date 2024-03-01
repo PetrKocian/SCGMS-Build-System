@@ -47,12 +47,12 @@ def copy_scgms_rpizerow():
     shutil.copytree("temp/scgms/sources", "build_dir/RpiZeroW/sources/SmartCGMS")
 
 def copy_scgms_wasm_emcc():
-    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_emcc/sources")
-    shutil.copytree("temp/filters", "build_dir/Wasm_emcc/sources/filters")
+    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_emcc/smartcgms_sources")
+    shutil.copytree("temp/filters", "build_dir/Wasm_emcc/smartcgms_sources/filters")
 
 def copy_scgms_wasm_wamr():
-    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_wamr/sources")
-    shutil.copytree("temp/filters", "build_dir/Wasm_wamr/sources/filters")
+    shutil.copytree("temp/scgms/sources", "build_dir/Wasm_wamr/smartcgms_sources")
+    shutil.copytree("temp/filters", "build_dir/Wasm_wamr/smartcgms_sources/filters")
 
 def add_wasi_path():
      #print("Provide path to WASI (can be set manually in build_dir/Wasm_wamr/wasi_path.cmake)")
