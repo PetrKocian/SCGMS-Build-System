@@ -5,14 +5,20 @@ import shutil
 import subprocess
 from distutils.dir_util import copy_tree
 
+
+# PATHS TO TOOLCHAINS
+esp_idf_path = "~/esp/esp-idf"
+wasi_path = "/opt/wasi-sdk"
+emsdk_path = "~/emsdk"
+
+# GIT SSH KEY
+git_ssh_identity_file = os.path.expanduser("~/.ssh/id_ed25519")
+git_ssh_cmd = "ssh -i %s" % git_ssh_identity_file    
+
+
 build_dir = "build_dir"
 supported_archs = ["esp32", "rpizerow", "wasm_emcc", "wasm_wamr", "all"]
 preprocessor = "./preprocessor"
-
-
-
-git_ssh_identity_file = os.path.expanduser("~/.ssh/id_ed25519")
-git_ssh_cmd = "ssh -i %s" % git_ssh_identity_file    
 
 def print_help():
     print("Usage: python test.py <architecture>")
@@ -58,22 +64,20 @@ def add_wasi_path():
      #print("Provide path to WASI (can be set manually in build_dir/Wasm_wamr/wasi_path.cmake)")
     with open('build_dir/Wasm_wamr/wasi_path.cmake', 'w') as file:
         file.write("SET (WASI_SDK_DIR \"")
-        file.write("/opt/wasi-sdk")
+        file.write(wasi_path)
         file.write("\")")
-
-
 
 
 def add_emcc_path():
     with open('build_dir/Wasm_emcc/emcc.sh', 'w') as file:
-        file.write("cd ~/emsdk\n")
+        file.write("cd " +emsdk_path+ "\n")
         file.write("source ./emsdk_env.sh\n")
         file.write("cd -\n")
     os.chmod('build_dir/Wasm_emcc/emcc.sh', 0o755)
 
 def add_esp_idf_path():
     with open('build_dir/ESP32/make.sh', 'w') as file:
-        file.write("cd ~/esp/esp-idf\n")
+        file.write("cd "+esp_idf_path+"\n")
         file.write("source ./export.sh\n")
         file.write("cd -\n")
         file.write("idf.py build\n")
