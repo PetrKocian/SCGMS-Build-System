@@ -9,6 +9,8 @@ build_dir = "build_dir"
 supported_archs = ["esp32", "rpizerow", "wasm_emcc", "wasm_wamr", "all"]
 preprocessor = "./preprocessor"
 
+
+
 git_ssh_identity_file = os.path.expanduser("~/.ssh/id_ed25519")
 git_ssh_cmd = "ssh -i %s" % git_ssh_identity_file    
 
@@ -37,7 +39,7 @@ def clone_scgms():
 
 
 def copy_scgms_esp32():
-    copy_tree("temp/filters", "build_dir/ESP32/components/filters")
+    copy_tree("temp/filters", "build_dir/ESP32/components/filters") # use copy tree instead of shutil.copy_tree since the destination folder is not empty
     copy_tree("temp/scgms/sources", "build_dir/ESP32/components/scgms_embedded/sources")
 
 def copy_scgms_rpizerow():
@@ -52,7 +54,30 @@ def copy_scgms_wasm_wamr():
     shutil.copytree("temp/scgms/sources", "build_dir/Wasm_wamr/sources")
     shutil.copytree("temp/filters", "build_dir/Wasm_wamr/sources/filters")
 
+def add_wasi_path():
+     #print("Provide path to WASI (can be set manually in build_dir/Wasm_wamr/wasi_path.cmake)")
+    with open('build_dir/Wasm_wamr/wasi_path.cmake', 'w') as file:
+        file.write("SET (WASI_SDK_DIR \"")
+        file.write("/opt/wasi-sdk")
+        file.write("\")")
 
+
+
+
+def add_emcc_path():
+    with open('build_dir/Wasm_emcc/emcc.sh', 'w') as file:
+        file.write("cd ~/emsdk\n")
+        file.write("source ./emsdk_env.sh\n")
+        file.write("cd -\n")
+    os.chmod('build_dir/Wasm_emcc/emcc.sh', 0o755)
+
+def add_esp_idf_path():
+    with open('build_dir/ESP32/make.sh', 'w') as file:
+        file.write("cd ~/esp/esp-idf\n")
+        file.write("source ./export.sh\n")
+        file.write("cd -\n")
+        file.write("idf.py build\n")
+    os.chmod('build_dir/ESP32/make.sh', 0o755)
 
 def get_architecture_folder(repo_url, branch, folder_path):
     print("Cloning build environment")
@@ -115,6 +140,7 @@ def main():
         folder_to_pull = "ESP32"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_esp32()
+        add_esp_idf_path()
     elif arch == "rpizerow":
         folder_to_pull = "RpiZeroW"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
@@ -123,23 +149,28 @@ def main():
         folder_to_pull = "Wasm_emcc"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_emcc()
+        add_emcc_path()
     elif arch == "wasm_wamr":
         folder_to_pull = "Wasm_wamr"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_wamr()
+        add_wasi_path()
     elif arch == "all":
         folder_to_pull = "ESP32"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_esp32()
+        add_esp_idf_path()
         folder_to_pull = "RpiZeroW"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_rpizerow()
         folder_to_pull = "Wasm_emcc"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_emcc()
+        add_emcc_path()
         folder_to_pull = "Wasm_wamr"  
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_wamr()
+        add_wasi_path()
 
 
 if __name__ == "__main__":
