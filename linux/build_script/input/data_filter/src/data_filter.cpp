@@ -45,7 +45,7 @@
 #include <freertos/task.h>
 #elif  defined(FREERTOS)
 #include <freertos/FreeRTOS.h>
-#include <include/task.h>
+#include <freertos/task.h>
 #endif
 
 CData_Filter::CData_Filter(scgms::IFilter *output) : CBase_Filter(output) {
