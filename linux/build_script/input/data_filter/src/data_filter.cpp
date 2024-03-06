@@ -41,9 +41,11 @@
 #if defined (WASM)
 #include <iostream>
 #elif defined(ESP32)
-#include <freertos/include/freertos/task.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #elif  defined(FREERTOS)
-#include <FreeRTOS/Source/include/task.h>
+#include <freertos/FreeRTOS.h>
+#include <include/task.h>
 #endif
 
 CData_Filter::CData_Filter(scgms::IFilter *output) : CBase_Filter(output) {

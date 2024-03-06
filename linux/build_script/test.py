@@ -86,6 +86,14 @@ def add_esp_idf_path():
         file.write("cd -\n")
         file.write("idf.py build\n")
     os.chmod('build_dir/ESP32/make.sh', 0o755)
+    with open('build_dir/ESP32/run.sh', 'w') as file:
+        file.write("cd "+esp_idf_path+"\n")
+        file.write("source ./export.sh\n")
+        file.write("cd -\n")
+        file.write("idf.py flash monitor\n")
+    os.chmod('build_dir/ESP32/run.sh', 0o755)
+
+
 
 # fetch specified build environment folder from git remote
 def get_architecture_folder(repo_url, branch, folder_path):
