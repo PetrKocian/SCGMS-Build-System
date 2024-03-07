@@ -1,2 +1,2 @@
-docker build docker/dockerfile -t wasm-builder
+docker build docker -t wasm-builder
 
