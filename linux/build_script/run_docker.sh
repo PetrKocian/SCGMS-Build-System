@@ -1,10 +1,10 @@
 
 if [ $# -eq 0 ]; then
-    echo "ARCH=\"\"" > docker_env/architecture 
+    echo "ARCH=\"\"" > docker/architecture 
 elif [ $# -eq 1 ]; then
-    echo "ARCH=\"$1\"" > docker_env/architecture 
+    echo "ARCH=\"$1\"" > docker/architecture 
 else
-    echo "ARCH=\"\"" > docker_env/architecture 
+    echo "ARCH=\"\"" > docker/architecture 
 fi
 
-docker run -it -v $(pwd):/src wasm-builder-env
+docker run -it -v $(pwd):/src wasm-builder

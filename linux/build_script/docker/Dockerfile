@@ -14,10 +14,10 @@ RUN apt-get -y install build-essential
 
 RUN apt-get -y install python3 python3-pip
 
+RUN apt-get install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
+
 RUN pip install GitPython
 
 RUN apt-get -y install git
 
-RUN apt-get -y install git wget flex bison gperf python3 python3-pip python3-venv cmake ninja-build ccache libffi-dev libssl-dev dfu-util libusb-1.0-0
-
-CMD /src/docker_env/script.sh
+CMD /src/docker/script.sh
