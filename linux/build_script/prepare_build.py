@@ -1,5 +1,6 @@
 import os
 import sys
+os.environ["GIT_PYTHON_REFRESH"] = "quiet"
 import git
 import shutil
 import subprocess
@@ -21,7 +22,7 @@ preprocessor = "./preprocessor"
 
 # prints help
 def print_help():
-    print("Usage: python test.py <architecture>")
+    print("Usage: ./run_docker.sh <architecture>")
     print("Supported architectures:")
     for arch in supported_archs:
         print(" " + arch)
@@ -36,7 +37,7 @@ def architecture_supported(input):
 # clones SCGMS core and common monolith repo to temp dir
 def clone_scgms():
     print("Cloning SCGMS")
-    repo_url = "git@github.com:PetrKocian/SCGMS-Embedded.git"
+    repo_url = "https://github.com/PetrKocian/SCGMS-Embedded.git"
     repo_dir = "temp/scgms"
     if os.path.exists(repo_dir):
         repo = git.Repo(repo_dir)
@@ -155,7 +156,7 @@ def main():
     clone_scgms()
 
     # repo url for environments
-    repo_url = "git@github.com:PetrKocian/SCGMS-Build-Environments.git"
+    repo_url = "https://github.com/PetrKocian/SCGMS-Build-Environments.git"
     branch_name = "main"
 
     # Prepare specified architecture (pull build env repo, copy files to build_dir, and add path script if necessary)
@@ -194,6 +195,10 @@ def main():
         get_architecture_folder(repo_url, branch_name, folder_to_pull)
         copy_scgms_wasm_wamr()
         add_wasi_path()
+
+    # Delete temp
+    if os.path.exists("temp"):
+        shutil.rmtree("temp")
 
 if __name__ == "__main__":
     main()
