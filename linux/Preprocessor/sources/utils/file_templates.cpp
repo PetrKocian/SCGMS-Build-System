@@ -72,7 +72,6 @@ const std::string between_do_create_filter =
 R"STRING_END((&id, next_filter, &filter) == S_OK)
 	{
 		result = refcnt::make_shared_reference_ext<scgms::SFilter, scgms::IFilter>(filter, false);
-		return result;
 	}
 	if ()STRING_END";
 
